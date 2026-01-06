@@ -14,10 +14,15 @@ const app = express();
 /* =========================
    MIDDLEWARES
 ========================= */
+//https://blogs-app-admin.vercel.app/
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    credentials: true, // 
+    origin: [
+    "https://blogs-app-admin.vercel.app",
+    "http://localhost:3000",
+
+    ],
+    credentials: true, 
   })
 );
 
