@@ -13,9 +13,9 @@ const createBlog = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Title and content are required");
   }
 
-  let imagePath = req.file ? req.file.path : null;
+  let imagePath = req.file ? req.file.filename : null;
   if (req.file) {
-    imagePath = req.file.path; // path in uploads folder
+    imagePath = req.file.filename; // path in uploads folder
   }
 
   const blog = await Blog.create({
@@ -23,12 +23,19 @@ const createBlog = asyncHandler(async (req, res) => {
     content,
     summary,
     image : imagePath,
-    author: req.user._id // from verifyJWT middleware
+    author: req.user._id 
   });
 
-  res.status(201).json(
-    new ApiResponse(201, blog, "Blog created successfully")
-  );
+  const blogObj = blog.toObject();
+
+if (blogObj.image) {
+  blogObj.image = `${req.protocol}://${req.get("host")}/uploads/${blogObj.image}`;
+}
+
+res.status(201).json(
+  new ApiResponse(201, blogObj, "Blog created successfully")
+);
+
 });
 
 

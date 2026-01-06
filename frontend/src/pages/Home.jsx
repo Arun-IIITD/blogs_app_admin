@@ -165,7 +165,7 @@ const Home = () => {
                   {blog.image && (
                     <div className="image-wrapper">
                       <img
-                        src={`http://localhost:2000/${blog.image}`}
+                        src={`https://blogs-app-admin.onrender.com/${blog.image}`}
                         alt={blog.title}
                       />
                     </div>
