@@ -1,0 +1,52 @@
+/* createpost.css */
+
+.create-post-container {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.create-post-container h1 {
+  text-align: center;
+}
+
+.create-post-container input[type="text"],
+.create-post-container input[type="file"] {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.editor {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.create-post-container button {
+  padding: 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+.image-preview {
+  margin-top: 10px;
+}
+
+.image-preview p {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
