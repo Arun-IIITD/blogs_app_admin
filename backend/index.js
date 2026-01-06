@@ -15,16 +15,26 @@ const app = express();
    MIDDLEWARES
 ========================= */
 //https://blogs-app-admin.vercel.app/
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://blogs-app-admin.vercel.app",
+];
+
 app.use(
   cors({
-    origin: [
-    "https://blogs-app-admin.vercel.app",
-    "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // Postman
 
-    ],
-    credentials: true, 
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS not allowed"));
+    },
+    credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(cookieParser());
