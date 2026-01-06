@@ -64,7 +64,7 @@ const Home = () => {
      FETCH BLOGS (PUBLIC + AUTH)
   ========================= */
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    //const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
     if (storedUser) {
@@ -188,13 +188,13 @@ const Home = () => {
                       <button
                         className="menu-btn"
                         onClick={() =>
-                          setOpenMenuId(openMenuId == blog._id ? null : blog._id)
+                          setOpenMenuId(openMenuId === blog._id ? null : blog._id)
                         }
                       >
                         ⋮
                       </button>
 
-                      {openMenuId == blog._id && (
+                      {openMenuId === blog._id && (
                         <div className="menu-dropdown">
 
                           <button
