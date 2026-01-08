@@ -56,7 +56,7 @@ mongoose
    ROUTES
 ========================= */
 app.get("/", (req, res) => {
-  res.send("server started");
+  res.send("server started arun");
 });
 
 app.use("/api/v1/users", userRouter);
@@ -67,5 +67,5 @@ app.use("/api/v1/blogs", blogRouter);
 ========================= */
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Servers running on port ${PORT}`);
 });

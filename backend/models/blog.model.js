@@ -23,9 +23,41 @@ const blogSchema = new mongoose.Schema(
             type : String,
 
         },
-        author: {
-            type: mongoose.Schema.Types.ObjectId,
-      ref: "userblog", // matches your User model collection name
+
+        likes:
+
+        {type: Number,
+        default: 0,
+        min: 0,
+        
+
+        },
+
+          dislikes:
+
+        {type: Number,
+            default: 0,
+            min:0,
+        
+
+        },
+
+        likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userblog"
+      }
+    ],
+
+    dislikedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userblog"
+      }
+    ],
+      author: {
+     type: mongoose.Schema.Types.ObjectId,
+      ref: "userblog", 
       required: true
 
         }

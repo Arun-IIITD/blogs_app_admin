@@ -3,6 +3,8 @@ import { verifyJWT, isAdmin } from "../middlewares/auth.middleware.js";
 import { checkBlogOwnership } from "../middlewares/blog.middleware.js";
 import {
   createBlog,
+  likeBlog,
+  dislikeBlog,
   getBlogs,
   getBlog,
   getAllBlogsPublic,
@@ -15,9 +17,12 @@ const router = Router();
 router.get("/public", getAllBlogsPublic);
 router.use(verifyJWT);
 router.get("/get-blogs", getBlogs);
-router.get("/get-blog/:id",getBlog)
+router.get("/get-blog/:id",getBlog);
+router.post("/:id/like", likeBlog);
+router.post("/:id/dislike", dislikeBlog);
 router.post("/post",upload.single("image"),createBlog);
 router.put("/edit-blog/:id", checkBlogOwnership,upload.single("image"),updateBlog);
 router.delete("/delete-blog/:id", checkBlogOwnership,deleteBlog);
+
 
 export default router;

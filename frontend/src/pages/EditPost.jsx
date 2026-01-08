@@ -22,10 +22,12 @@ const EditPost = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/");
-      return;
-    }
+     //const token = localStorage.getItem("token");
+      if (!token) return alert("Please login with your accnt to edit. This is not your blog");
+    // if (!token) {
+    //   navigate("/");
+    //   return;
+    // }
 
     const fetchBlog = async () => {
       try {

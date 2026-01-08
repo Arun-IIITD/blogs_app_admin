@@ -10,18 +10,20 @@ const createBlog = asyncHandler(async (req, res) => {
   const { title, content, summary } = req.body;
 
   if (!title || !content || !summary) {
-    throw new ApiError(400, "Title and content are required");
+    throw new ApiError(400, "All fields are required");
   }
 
   let imagePath = req.file ? req.file.filename : null;
   if (req.file) {
-    imagePath = req.file.filename; // path in uploads folder
+    imagePath = req.file.filename; 
   }
 
   const blog = await Blog.create({
     title,
     content,
     summary,
+    likes : 0,
+    dislikes: 0,
     image : imagePath,
     author: req.user._id 
   });
@@ -41,7 +43,9 @@ res.status(201).json(
 
 // GET all blogs (public)
 const getAllBlogsPublic = asyncHandler(async (req, res) => {
-  const blogs = await Blog.find().sort({ createdAt: -1 });
+  const blogs = await Blog.find()
+  // .populate("author", "name")
+  .sort({ createdAt: -1 });
 
   res.status(200).json(
     new ApiResponse(200, blogs, "Public blogs fetched")
@@ -92,20 +96,13 @@ const updateBlog = asyncHandler(async (req, res) => {
   blog.summary = summary || blog.summary;
 
   if (req.file) {
-      blog.image = req.file.path; // or req.file.filename
+      blog.image = req.file.path; 
     }
   await blog.save();
 
   res.status(200).json(new ApiResponse(200, blog, "Blog updated successfully"));
 });
 
-
-
-
-
-/* =========================
-   DELETE BLOG
-========================= */
 const deleteBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.findOneAndDelete({ _id: req.params.id, author: req.user._id });
   if (!blog) {
@@ -115,4 +112,67 @@ const deleteBlog = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, null, "Blog deleted successfully"));
 });
 
-export { createBlog, getBlogs, getAllBlogsPublic, getBlog, updateBlog, deleteBlog };
+const likeBlog = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) {
+    throw new ApiError(404, "Blog not found");
+  }
+
+  const userId = req.user._id;
+  if(blog.likedBy.includes(userId)){
+    blog.likedBy.pull(userId);
+    blog.likes -=1;
+  }
+  else{
+    blog.likedBy.push(userId);
+    blog.likes+=1;
+
+    if(blog.dislikedBy.includes(userId)){
+      blog.dislikedBy.pull(userId);
+      blog.dislikes -=1;
+    }
+  }
+
+  
+  await blog.save();
+  res.status(200).json(
+    new ApiResponse(200, blog, "Blog liked successfully")
+  );
+});
+
+
+const dislikeBlog = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) {
+    throw new ApiError(404, "Blog not found");
+  }
+
+  const userId = req.user._id;
+
+  // If already disliked → remove dislike
+  if (blog.dislikedBy.includes(userId)) {
+    blog.dislikedBy.pull(userId);
+    blog.dislikes -= 1;
+  } else {
+    blog.dislikedBy.push(userId);
+    blog.dislikes += 1;
+
+    // remove like if exists
+    if (blog.likedBy.includes(userId)) {
+      blog.likedBy.pull(userId);
+      blog.likes -= 1;
+    }
+  }
+
+
+
+  
+  await blog.save();
+  res.status(200).json(
+    new ApiResponse(200, blog, "Blog disliked successfully")
+  );
+});
+
+export { createBlog, getBlogs, likeBlog,dislikeBlog, getAllBlogsPublic, getBlog, updateBlog, deleteBlog };
